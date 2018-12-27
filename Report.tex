@@ -21,7 +21,7 @@
 
 \textbf{Problem.} We implement a parallel program to calculate the area of the Mandelbrot set. The algorithm and numerical results are shown in the following sections.
 
-\emph{All the numerical results shown in sections except Section \ref{Sec:Par} are carried out on personal machine. The numerical results in Section \ref{Sec:Par} are for final submission, run on the provided 8-core machine.}
+\emph{All the numerical results shown in the following sections except Section \ref{Sec:Par} are carried out on personal machine. The numerical results in Section \ref{Sec:Par} are for final submission, run on the provided 8-core machine.}
 
 \section{The Mandelbrot set}
 
@@ -47,9 +47,9 @@ We utilize the pixel counting method in order to approximate $ A = m \rbr{\mathc
 
 \section{Monte Carlo Algorithm}
 
-We utilize Monte Carlo algorithm here. \emph{It should be noticed that since the boundary of $\mathcal{M}$ is highly irregular, and again the indicator function $I_{\mathcal{M}}$ has no continuity, we cannot expect deterministic algorithm provides a answer with any error estimation. One can always find magic numbers to reach a small error to the fixed value $A_{\text{std}}$, but it is impossible to find such numbers if high precision values of $A_{\text{std}}$ is complete unknown.}
+We utilize Monte Carlo algorithm here. \emph{It should be noticed that since the boundary of $\mathcal{M}$ is highly irregular, and again the indicator function $I_{\mathcal{M}}$ has no continuity, we cannot expect deterministic algorithm to provide a answer with error estimation. One can always find magic numbers with a small error to the fixed value $A_{\text{std}}$, but it is impossible to find such numbers if high precision values of $A_{\text{std}}$ is complete unknown.}
 
-Our algorithm falls into the framework of stratified Monte Carlo: we divided the region to be investigated into grids, and randomly, uniformly samples points, one per grid. We then calculate the number of points lying in $M_k$ for a large $k$, and make an estimation of $ m \rbr{\mathcal{M}^{\circ}} $ according to standard Monte Carlo techniques. Since we sample points in each grid instead of sampling directly from the whole region, the algorithm corresponds stratified Monte Carlo method.
+Our algorithm falls into the framework of stratified Monte Carlo: we divided the region to be investigated into grids, and randomly uniformly samples points, one per grid. We then calculate the number of points lying in $M_k$ for a large $k$, and make an estimation of $ m \rbr{\mathcal{M}^{\circ}} $ according to standard Monte Carlo techniques. Since we sample points in each grid instead of sampling directly from the whole region, the algorithm corresponds stratified Monte Carlo method.
 
 It is an interesting question how the variance is reduced, and what is the difference between this algorithm and direct Monte Carlo. Assume the search region has area $A_0$ and there are $N$ grids. And we also assume the area of $\mathcal{M}^{\circ}$ inside each grid to be $A_i$ for $ 1 \le i \le N $. As a result, the variance of such estimation is
 \begin{equation}
@@ -67,11 +67,13 @@ we immediately have
 \begin{equation}
 \opvar \hat{A}_{\text{str}} \le \opvar \hat{A}_{\text{dir}}
 \end{equation}
-from the concavity of $ f \rbr{x} = x \rbr{ 1 - x } $. This means the stratified Monte Carlo is always better than direct Monte Carlo, and therefore has half-order convergence. Moreover, for the case of $\mathcal{M}^{\circ}$, the bound will never be tight since there are many $i$ such that $ A_i = 0 $ or $ A_i = A / N $, according to the connectivity of $\mathcal{M}$. Although we cannot derive the exact bound, $ \opvar \hat{A}_{\text{str}} $ should be smaller than $ \opvar \hat{A}_{\text{dir}} $ by a multiplication of a constant.
+from the concavity of $ f \rbr{x} = x \rbr{ 1 - x } $. This means the stratified Monte Carlo is always better than direct Monte Carlo, and therefore it has half-order convergence. Moreover, for the case of $\mathcal{M}^{\circ}$, the bound will never be tight since there are many $i$ such that $ A_i = 0 $ or $ A_i = A / N $, according to the connectivity of $\mathcal{M}$. Although we cannot derive the exact bound, $ \opvar \hat{A}_{\text{str}} $ should be smaller than $ \opvar \hat{A}_{\text{dir}} $ by a multiplication of a constant.
 
 \section{Implementation}
 
 \subsection{Cardioid and bulb checking}
+
+The main complexity lies in $\mathcal{M}^{\circ}$, since points not lying in $M_k$ will finally escape in the first $k$ steps. As a result, we can perform fast checking on part of $\mathcal{M}^{\circ}$, according to its geometric properties.
 
 The main cardioid can written analytically and we utilize
 \begin{equation}
@@ -99,7 +101,7 @@ The radius is approximately (note that they are not exactly circles)
 \begin{equation}
 r_{ p / q } = \frac{ \sin \spi p / q }{q^2}
 \end{equation}
-and we calculate the inscribed circles by find the circle tangent to $ a_{ p / q } $ with radius $ \eta_{ p / q } r_{ p / q } $ where $ \eta_{ p / q } $ is a prescribed constant close to 1 selected according to \parencite{linas_vepstas_mandelbrot_nodate}.
+and we calculate the inscribed circles by find the circle tangent to the cardioid at $ a_{ p / q } $ with radius $ \eta_{ p / q } r_{ p / q } $ where $ \eta_{ p / q } $ is a prescribed constant close to 1 selected according to \parencite{linas_vepstas_mandelbrot_nodate}.
 
 \subsection{Selection of parameters}
 
@@ -119,7 +121,7 @@ We set a fixed number $n$, decompose the region $\Omega$ into $ N = 2 n \times n
 }
 \end{figure}
 
-From these figure, we may directly find the half-order convergence of variance, but we should also notice there are also bias using $ m \rbr{M_L} $ to approximate $A$. According to the figure, if we want to achieve an accuracy about $10^{-5}$, we must control the bias under about $10^{-5}$ and hence $L$ should value at least 131072. From this figure, we know that $n$ should be set to about 4096 to 8192 for a reasonable variance, say standard deviation about $10^{-5}$.
+From these figure, we may directly find the half-order convergence of variance, but we should also notice that there are bias when using $ m \rbr{M_L} $ to approximate $A$. According to the figure, if we want to achieve an accuracy about $10^{-5}$, we must control the bias under about $10^{-5}$ and hence $L$ should value at least 131072. From this figure, we know that $n$ should be set to about 4096 to 8192 for a reasonable variance, say standard deviation about $10^{-5}$.
 
 The average running times of 10 trials are plotted in Figure \ref{Fig:Time}.
 
@@ -143,20 +145,24 @@ We then investigate the possibility using Multi-level Monte Carlo. To do this, w
 \label{Fig:Multi}
 \end{figure}
 
-From this figure, we verifies that for a fixed $n$, the estimation of $ m \rbr{ M_{ L / 2 } \setminus M_L } $ has smaller variance when $L$ increases. This indicates the space of multi-level Monte Carlo, since for smaller $L$ we may use larger $n$ to reduce variance, while for larger $L$ we may use smaller $n$ to increase efficiency.
+From this figure, we verifies that for a fixed $n$, the estimation of $ m \rbr{ M_{ L / 2 } \setminus M_L } $ has smaller variance when $L$ increases. This indicates the possibility of multi-level Monte Carlo, since for smaller $L$ we may use larger $n$ to reduce variance, while for larger $L$ we may use smaller $n$ to increase efficiency.
 
-Combining $ O \rbr{ L n^2 } $ time complexity and some experimental result, we use the following multi-level scheme:
+Combining $ O \rbr{ L n^2 } $ time complexity and some experimental result (e.g. cache issues, scheduling cost and fast checking may get involved, and therefore we follow experiments instead of using analysis to do optimization), we use the following multi-level scheme:
 \begin{partlist}
-\item Estimate $ A_1 = -m \rbr{ M_{ L_1 / 4 } \setminus M_{L_1} } $ with $ L_1 = 131072 $ and grid $ N_1 = 2 n \times n $;
-\item Estimate $ A_2 = -m \rbr{ M_{ L_2 / 4 } \setminus M_{L_2} } $ with $ L_2 = 32768 $ and grid $ N_2 = 4 n \times 2 n $;
-\item Estimate $ A_3 = m \rbr{M_{L_3}} $ with $ L_3 = 8192 $ and grid $ N_3 = 8 n \times 4 n $.
+\item Estimate $ A_1 = -m \rbr{ M_{L_2} \setminus M_{L_1} } $ and grid $ N_1 = 2 n \times n $;
+\item Estimate $ A_2 = -m \rbr{ M_{L_3} \setminus M_{L_2} } $ and grid $ N_2 = 4 n \times 2 n $;
+\item Estimate $ A_3 = m \rbr{M_{L_3}} $ and grid $ N_3 = 8 n \times 4 n $,
 \end{partlist}
+with
+\begin{equation}
+L_1 = 4 L_2 = 16 L_3.
+\end{equation}
 The final estimation of $A$ is
 \begin{equation}
 \hat{A}_{\text{mul}} = \hat{A}_1 + \hat{A}_2 + \hat{A}_3.
 \end{equation}
 
-The comparison between direct stratified Monte Carlo and multi-level Monte Carlo is summarized in Table \ref{Tbl:Multi}. We again conduct 10 trials.
+The comparison between direct stratified Monte Carlo and multi-level Monte Carlo is summarized in Table \ref{Tbl:Multi}. We again conduct 10 trials. Here we set $ L = L_1 = 131072 $.
 
 \begin{table}[htbp]
 \centering
@@ -174,24 +180,24 @@ From this result, we can see the multi-level Monte Carlo method with $ n = 1024 
 
 \section{Parallel algorithm} \label{Sec:Par}
 
-We utilize OpenMP to run the algorithm on parallel with cores. Previous numerical algorithms are carried out on personal machine with 4 cores. The numerical results below is run on the provided machine with 8 cores. We use a single \verb"omp parallel for" for the first dimension of grids $ N = 2 n \times n $. Since there are only $ 2 n $ iterations for the first dimension and $n$ is not very large, we directly use dynamic schedule. the numerical result is summarized in Table \ref{Tbl:Math}. We take 10 trials. The job ID is 4426 and we fix the random seed to 1 for reproducing. One may vary the random seed.
+We utilize OpenMP to run the algorithm on parallel with cores. Previous numerical algorithms are carried out on personal machine with 4 cores. The numerical results below is run on the provided machine with 8 cores. We use a single \verb"omp parallel for" for the first dimension of grids $ N = 2 n \times n $. Since there are only $ 2 n $ iterations for the first dimension and $n$ is not very large, we directly adopt dynamic scheduling. the numerical result is summarized in Table \ref{Tbl:Math}. The job ID is 4464.
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|}
 \hline
-Algorithm & $n$ & Mean error & Standard deviation & Time (\Si{s}) \\
+Algorithm & $n$ & Mean error & Standard deviation & Time (\Si{s}) & Pass \\
 \hline
-Multi-level & 1024 & 3.43962e-5 & 2.28783e-5 & 5.23038 \\
+Multi-level & 1024 & 2.21922e-5 & 2.01381e-5 & 6.22934 & 9 / 10 \\
 \hline
-Multi-level & 2048 & 2.39759e-5 & 1.19987e-5 & 20.96664 \\
+Multi-level & 2048 & 2.62222e-5 & 9.47315e-6 & 24.79697 & 10 / 10 \\
 \hline
 \end{tabular}
 \caption{Numerical result on 8 cores}
 \label{Tbl:Math}
 \end{table}
 
-Using multi-level Monte Carlo with $ n = 1024 $ (and $ L_1 = 131072 $), we can roughly achieve $ 5 \times 10^{-5} $ error bound with reasonable probability since $ \mu + \sigma $ approximately lies in the error bound. This means 70\% of trials pass the restriction of bound. If we need a more stable result, we can set $ n = 2048 $ and here $ \mu + 3 \sigma $ approximately lies in the error bound.
+Using multi-level Monte Carlo with $ n = 1024 $ (and $ L_1 = 131072 $), we can roughly achieve $ 5 \times 10^{-5} $ error bound with reasonable probability since $ \mu + \sigma $ lies in the error bound and we have a probability of 83\% to pass the error bound restriction. This means 50\% of trials pass the restriction of bound. If we need a more stable result, we can set $ n = 2048 $ and here $ \mu + 3 \sigma $ approximately lies in the error bound, with a probability 99\%.
 
 \printbibliography
 

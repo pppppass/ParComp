@@ -6,7 +6,6 @@ int main(int argc, const char* argv[])
 {
     init_array();
     const int seed = time(NULL);
-    srand48(seed);
     const double a_std = 1.5065918849;
     double m1, m2, t;
     m1 = 0, m2 = 0, t = 0;
@@ -15,9 +14,9 @@ int main(int argc, const char* argv[])
     {
         double start = omp_get_wtime();
         double a = 9.0;
-        a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 2048, 1024, 32768, 131072);
-        a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 4096, 2048, 8192, 32768);
-        a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 8192, 4096, 0, 8192);
+        a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 2048, 1024, 32768, 131072, seed);
+        a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 4096, 2048, 8192, 32768, seed);
+        a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 8192, 4096, 0, 8192, seed);
         printf("\tArea: %.20f\n", a);
         printf("\tError: %.20f\n", a - a_std);
         double end = omp_get_wtime();
@@ -36,9 +35,9 @@ int main(int argc, const char* argv[])
     {
         double start = omp_get_wtime();
         double a = 9.0;
-        a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 4096, 2048, 32768, 131072);
-        a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 8192, 4096, 8192, 32768);
-        a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 16384, 8192, 0, 8192);
+        a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 4096, 2048, 32768, 131072, seed);
+        a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 8192, 4096, 8192, 32768, seed);
+        a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 16384, 8192, 0, 8192, seed);
         printf("\tArea: %.20f\n", a);
         printf("\tError: %.20f\n", a - a_std);
         double end = omp_get_wtime();

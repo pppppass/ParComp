@@ -16,8 +16,7 @@ Report.bbl: Report.tex | pnote.cls pdef.sty
 	biber Report
 
 pnote.cls pdef.sty:
-	ln -s ptmpls/pdef.sty .
-	ln -s ptmpls/pnote.cls .
+	ln -s ptmpls/$@ .
 
 .SECONDEXPANSION:
 $(PGFOBJS) $(TBLOBJS): $(wildcard $(RUNOBJS))
