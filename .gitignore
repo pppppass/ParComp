@@ -1,0 +1,29 @@
+# Temporary files
+.ipynb_checkpoints/
+.*~/
+build/
+*.bak
+*.run
+__pycache__/
+Temporary/
+
+# Generated files
+*.aux
+*.bbl
+*.blg
+*.log
+*.synctex.gz
+*.thm
+*.bcf
+*.xml
+
+# Binary files
+*.pdf
+*.so
+*.ipynb
+
+# External files
+
+# Private files
+.vscode/
+setup.cfg
