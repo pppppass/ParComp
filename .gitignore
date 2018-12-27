@@ -23,6 +23,8 @@ Temporary/
 *.ipynb
 
 # External files
+pnote.cls
+pdef.sty
 
 # Private files
 .vscode/

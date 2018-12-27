@@ -5,15 +5,19 @@ RUNOBJS = Problem.run
 .PHONY: all
 all: hardware.txt environment.yml report
 
-Report.pdf: Report.tex Report.bbl $(PGFOBJS) $(TBLOBJS) | Report.aux
+Report.pdf: Report.tex Report.bbl $(PGFOBJS) $(TBLOBJS) | pnote.cls pdef.sty Report.aux
 	lualatex Report.tex
 
-Report.aux: Report.tex Report.bbl
+Report.aux: Report.tex Report.bbl | pnote.cls pdef.sty
 	lualatex Report.tex
 
-Report.bbl: Report.tex
+Report.bbl: Report.tex | pnote.cls pdef.sty
 	lualatex Report.tex
 	biber Report
+
+pnote.cls pdef.sty:
+	ln -s ptmpls/pdef.sty .
+	ln -s ptmpls/pnote.cls .
 
 .SECONDEXPANSION:
 $(PGFOBJS) $(TBLOBJS): $(wildcard $(RUNOBJS))
