@@ -17,8 +17,9 @@ static PyObject* wrapper_calc_area(PyObject* self, PyObject* args)
     omp_set_num_threads(thread);
 
     init_array();
+    srand48(seed);
 
-    double a = calc_area(x_min, x_max, y_min, y_max, n_x, n_y, it_min, it_max, seed);
+    double a = calc_area(x_min, x_max, y_min, y_max, n_x, n_y, it_min, it_max);
     
     return Py_BuildValue("d", a);
 }
