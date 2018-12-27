@@ -5,7 +5,7 @@ const int m = 10;
 int main(int argc, const char* argv[])
 {
     init_array();
-    const int seed = time(NULL);
+    int seed;
     const double a_std = 1.5065918849;
     double m1, m2, t;
     m1 = 0, m2 = 0, t = 0;
@@ -13,6 +13,7 @@ int main(int argc, const char* argv[])
     for (int i = 0; i < m; i++)
     {
         double start = omp_get_wtime();
+        seed = time(NULL);
         double a = 9.0;
         a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 2048, 1024, 32768, 131072, seed);
         a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 4096, 2048, 8192, 32768, seed);
@@ -34,6 +35,7 @@ int main(int argc, const char* argv[])
     for (int i = 0; i < m; i++)
     {
         double start = omp_get_wtime();
+        seed = time(NULL);
         double a = 9.0;
         a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 4096, 2048, 32768, 131072, seed);
         a -= 2.0 * calc_area(-2.0, 1.0, 0.0, 1.5, 8192, 4096, 8192, 32768, seed);

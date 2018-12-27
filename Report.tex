@@ -180,7 +180,7 @@ From this result, we can see the multi-level Monte Carlo method with $ n = 1024 
 
 \section{Parallel algorithm} \label{Sec:Par}
 
-We utilize OpenMP to run the algorithm on parallel with cores. Previous numerical algorithms are carried out on personal machine with 4 cores. The numerical results below is run on the provided machine with 8 cores. We use a single \verb"omp parallel for" for the first dimension of grids $ N = 2 n \times n $. Since there are only $ 2 n $ iterations for the first dimension and $n$ is not very large, we directly adopt dynamic scheduling. the numerical result is summarized in Table \ref{Tbl:Math}. The job ID is 4464.
+We utilize OpenMP to run the algorithm on parallel with cores. Previous numerical algorithms are carried out on personal machine with 4 cores. The numerical results below is run on the provided machine with 8 cores. We use a single \verb"omp parallel for" for the first dimension of grids $ N = 2 n \times n $. Since there are only $ 2 n $ iterations for the first dimension and $n$ is not very large, we directly adopt dynamic scheduling. the numerical result is summarized in Table \ref{Tbl:Math}. The job ID is 4479.
 
 \begin{table}[htbp]
 \centering
@@ -188,16 +188,16 @@ We utilize OpenMP to run the algorithm on parallel with cores. Previous numerica
 \hline
 Algorithm & $n$ & Mean error & Standard deviation & Time (\Si{s}) & Pass \\
 \hline
-Multi-level & 1024 & 2.21922e-5 & 2.01381e-5 & 6.22934 & 9 / 10 \\
+Multi-level & 1024 & 1.94732e-5 & 2.83699e-5 & 5.47144 & 7 / 10 \\
 \hline
-Multi-level & 2048 & 2.62222e-5 & 9.47315e-6 & 24.79697 & 10 / 10 \\
+Multi-level & 2048 & 1.50843e-5 & 1.23669e-6 & 21.91744 & 10 / 10 \\
 \hline
 \end{tabular}
 \caption{Numerical result on 8 cores}
 \label{Tbl:Math}
 \end{table}
 
-Using multi-level Monte Carlo with $ n = 1024 $ (and $ L_1 = 131072 $), we can roughly achieve $ 5 \times 10^{-5} $ error bound with reasonable probability since $ \mu + \sigma $ lies in the error bound and we have a probability of 83\% to pass the error bound restriction. This means 50\% of trials pass the restriction of bound. If we need a more stable result, we can set $ n = 2048 $ and here $ \mu + 3 \sigma $ approximately lies in the error bound, with a probability 99\%.
+Using multi-level Monte Carlo with $ n = 1024 $ (and $ L_1 = 131072 $), we can roughly achieve $ 5 \times 10^{-5} $ error bound with reasonable probability since $ \mu + \sigma $ lies in the error bound and we have a probability of 71\% to pass the error bound restriction (under Gaussian assumption). This means 50\% of trials pass the restriction of bound. If we need a more stable result, we can set $ n = 2048 $ and here $ \mu + 3 \sigma $ approximately lies in the error bound, with a probability 99\% (under Gaussian assumption).
 
 \printbibliography
 

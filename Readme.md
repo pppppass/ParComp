@@ -42,4 +42,4 @@ To reproduce the figures and tables:
 To reproduce the final numerical results for benchmarking:
 1. Activate Anaconda and execute `make environment` in the root folder to create a new environment `parcomp` and activate the environment `parcomp`, or ensure the environment has **gcc>=8.2.0**;
 2. Execute `make bench` to reproduce the result;
-3. The numerical results are placed in `job_ID_cu0x.out`, say `job_4464_cu01.out`.
+3. The numerical results are placed in `job_ID_cu0x.out`, say `job_4479_cu01.out`.
