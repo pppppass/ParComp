@@ -1,1 +1,0 @@
-ptmpls/pnote.cls
