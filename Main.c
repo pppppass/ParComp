@@ -5,7 +5,7 @@ const int m = 10;
 int main(int argc, const char* argv[])
 {
     init_array();
-    const int seed = 1;
+    const int seed = time(NULL);
     const double a_std = 1.5065918849;
     double m1, m2, t;
     m1 = 0, m2 = 0, t = 0;
