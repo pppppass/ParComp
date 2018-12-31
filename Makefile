@@ -3,7 +3,7 @@ TBLOBJS = Table1.tbl
 RUNOBJS = Problem.run
 
 .PHONY: all
-all: hardware.txt environment.yml report
+all: hardware.txt environment.yml template report
 
 Report.pdf: Report.tex Report.bbl $(PGFOBJS) $(TBLOBJS) | pnote.cls pdef.sty Report.aux
 	lualatex Report.tex
