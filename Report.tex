@@ -13,7 +13,7 @@
 
 \title{Report for Exercises 1}
 \author{Zhihan Li, 1600010653}
-\date{December 27, 2018}
+\date{December 31, 2018}
 
 \begin{document}
 
@@ -22,6 +22,8 @@
 \textbf{Problem.} We implement a parallel program to calculate the area of the Mandelbrot set. The algorithm and numerical results are shown in the following sections.
 
 \emph{All the numerical results shown in the following sections except Section \ref{Sec:Par} are carried out on personal machine. The numerical results in Section \ref{Sec:Par} are for final submission, run on the provided 8-core machine.}
+
+\textbf{We put a remark here. Since the algorithm is a stochastic algorithm, there is stochastic error with probability being large. What we can guarantee is the convergence in the probability sense and there may be trial s fails. The final submitted program runs for 10 trials with two set of parameters and one may observe statistics of the result.}
 
 \section{The Mandelbrot set}
 
@@ -64,7 +66,7 @@ Since
 \sum_i A_i = A,
 \end{equation}
 we immediately have
-\begin{equation}
+\begin{equation} \label{Eq:Upper}
 \opvar \hat{A}_{\text{str}} \le \opvar \hat{A}_{\text{dir}}
 \end{equation}
 from the concavity of $ f \rbr{x} = x \rbr{ 1 - x } $. This means the stratified Monte Carlo is always better than direct Monte Carlo, and therefore it has half-order convergence. Moreover, for the case of $\mathcal{M}^{\circ}$, the bound will never be tight since there are many $i$ such that $ A_i = 0 $ or $ A_i = A / N $, according to the connectivity of $\mathcal{M}$. Although we cannot derive the exact bound, $ \opvar \hat{A}_{\text{str}} $ should be smaller than $ \opvar \hat{A}_{\text{dir}} $ by a multiplication of a constant.
@@ -107,7 +109,19 @@ and we calculate the inscribed circles by find the circle tangent to the cardioi
 
 The search region is set to be $ \Omega \sbr{ -2, 1 } \times \sbr{ 0, 3 / 2 } $. We only calculate the region of half of $\mathcal{M}^{\circ}$, because the other half is identical due to symmetry.
 
-We set a fixed number $n$, decompose the region $\Omega$ into $ N = 2 n \times n $ grids. We also choose a number $L$ and estimate $A$ by estimating $ m \rbr{M_L} $. We test 10 times for each configuration and plot the mean error and standard deviation curve is plotted in Figure \ref{Fig:Err}. The numerical results are produced on personal machine with 4 cores.
+We set a fixed number $n$, decompose the region $\Omega$ into $ N = 2 n \times n $ grids. We also choose a number $L$ and estimate $A$ by estimating $ m \rbr{M_L} $. We test 10 times for each configuration and plot the mean error and standard deviation curve is plotted in Figure \ref{Fig:Err}. To be exact, we consider the mean average from the sampled result $\hat{A}_i$ by
+\begin{equation}
+\overline{\hat{A}} = \frac{1}{10} \sum_{ i = 1 }^{10} \hat{A}_i
+\end{equation}
+and test the mean error
+\begin{equation}
+\mu = \overline{\hat{A}} - A_{\text{std}}
+\end{equation}
+and the estimated standard deviation
+\begin{equation}
+\sigma = \sqrt{ \frac{1}{10} \sum_{ i = 1 }^{10} \rbr{ \hat{A}_i - \overline{\hat{A}} } }.
+\end{equation}
+Hence $\mu$ stands for the bias term if $\sigma$ is small enough, and $\sigma$ itself stands for the variance term in error. Here $\mu$ indeed reflects the bias only if $ \abs{\mu} > 3 \sigma / \sqrt{10} \approx \sigma $ since the estimated standard deviation $\mu$ is itself $ \sigma / \sqrt{10} $. The numerical results are produced on personal machine with 4 cores.
 
 \begin{figure}[htbp]
 {
@@ -117,11 +131,11 @@ We set a fixed number $n$, decompose the region $\Omega$ into $ N = 2 n \times n
 \label{Fig:Err}
 }
 {
-\footnotesize Lines: mean error of 10 trials; dashed lines: standard deviation of 10 trials. We take the absolute value of mean error to plot in logarithm scale.
+\footnotesize Solid lines: mean error of 10 trials, $\mu$; dashed lines: estimated standard deviation of 10 trials, $\sigma$. We take the absolute value of mean error to plot in logarithm scale.
 }
 \end{figure}
 
-From these figure, we may directly find the half-order convergence of variance, but we should also notice that there are bias when using $ m \rbr{M_L} $ to approximate $A$. According to the figure, if we want to achieve an accuracy about $10^{-5}$, we must control the bias under about $10^{-5}$ and hence $L$ should value at least 131072. From this figure, we know that $n$ should be set to about 4096 to 8192 for a reasonable variance, say standard deviation about $10^{-5}$.
+From these figure, we may directly find the the approximate half-order of variance. To be exact, the dashed line has slope $ 5 / 4 $ and hence the variance has order about $ 5 / 8 $ with respect to $N$ since $ N = O \rbr{n^2} $. This is surprising though, because of the nature of fractals and that we have only estimated a half order upper bound as $ \opvar \hat{A}_{\text{str}} \le \opvar \hat{A}_{\text{dir}} $ in \eqref{Eq:Upper}. As for the mean error, it oscillates when $ \abs{\mu} < \sigma $, but generally shows up to convergence when $ \abs{\mu} > \sigma $. In the latter case $\abs{\mu}$ indeed reflects the bias term. We should notice that there are bias when using $ m \rbr{M_L} $ to approximate $A$. According to the figure, if we want to achieve an accuracy about $10^{-5}$, we must control the bias under about $10^{-5}$ and hence $L$ should value at least 131072. From this figure, we know that $n$ should be set to about 4096 to 8192 for a reasonable variance, say standard deviation about $10^{-5}$.
 
 The average running times of 10 trials are plotted in Figure \ref{Fig:Time}.
 
@@ -132,11 +146,11 @@ The average running times of 10 trials are plotted in Figure \ref{Fig:Time}.
 \label{Fig:Time}
 \end{figure}
 
-Rough but direct estimation yields the time complexity $ O \rbr{ L N } = O \rbr{ L n^2 } $. This figure verifies the algorithm.
+Rough but direct estimation yields the time complexity $ O \rbr{ L N } = O \rbr{ L n^2 } $. This figure verifies the result.
 
 \section{Multi-level Monte Carlo}
 
-We then investigate the possibility using Multi-level Monte Carlo. To do this, we utilize stratified Monte Carlo to estimate $ m \rbr{ M_{ L / 2 } \setminus M_L } $. We also conduct 10 trials and the standard deviation is summarized in Figure \ref{Fig:Multi}.
+We then investigate the possibility using multi-level Monte Carlo. To do this, we utilize stratified Monte Carlo to estimate $ m \rbr{ M_{ L / 2 } \setminus M_L } $. We also conduct 10 trials and the standard deviation is summarized in Figure \ref{Fig:Multi}.
 
 \begin{figure}[htbp]
 \centering
@@ -147,7 +161,22 @@ We then investigate the possibility using Multi-level Monte Carlo. To do this, w
 
 From this figure, we verifies that for a fixed $n$, the estimation of $ m \rbr{ M_{ L / 2 } \setminus M_L } $ has smaller variance when $L$ increases. This indicates the possibility of multi-level Monte Carlo, since for smaller $L$ we may use larger $n$ to reduce variance, while for larger $L$ we may use smaller $n$ to increase efficiency.
 
-Combining $ O \rbr{ L n^2 } $ time complexity and some experimental result (e.g. cache issues, scheduling cost and fast checking may get involved, and therefore we follow experiments instead of using analysis to do optimization), we use the following multi-level scheme:
+Consequently, assume we use $ N_1, N_2, \cdots, N_K $ grid at each level, say to estimate $ -m \rbr{ M_{L_2} \setminus M_{L_1} }, -m \rbr{ M_{L_3} \setminus M_{L_2} }, \cdots, m \rbr{M_{L_K}} $. Conditioned on we make independent sampling on each level, the variance is approximately (from Figure \ref{Fig:Err} and \ref{Fig:Multi})
+\begin{equation} \label{Eq:Var}
+\sum_{ i = 1 }^{ K - 1 } \frac{1}{N_i} \frac{C_1}{L_i} + \frac{C_2}{\sqrt[4]{N_K}^5}.
+\end{equation}
+The computational cost is
+\begin{equation} \label{Eq:Cost}
+\sum_{ i = 1 }^K L_i N_i.
+\end{equation}
+Constrained on \eqref{Eq:Cost} and minimizing \eqref{Eq:Var}, the optimal choice of $N_i$ is
+\begin{gather}
+N_i = C \frac{\sqrt{C_1}}{L_i}, \\
+N_K = C \sqrt[9]{\frac{C_2}{L_K}}^4.
+\end{gather}
+The indicates we should impose $ n_i \propto \sqrt{ 1 / L_i } $.
+
+Combining the analysis above together with some experimental result (e.g. cache issues, scheduling cost and fast checking may get involved), we use the following multi-level scheme:
 \begin{partlist}
 \item Estimate $ A_1 = -m \rbr{ M_{L_2} \setminus M_{L_1} } $ and grid $ N_1 = 2 n \times n $;
 \item Estimate $ A_2 = -m \rbr{ M_{L_3} \setminus M_{L_2} } $ and grid $ N_2 = 4 n \times 2 n $;
@@ -168,7 +197,7 @@ The comparison between direct stratified Monte Carlo and multi-level Monte Carlo
 \centering
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-Algorithm & $n$ & Mean error & Standard deviation & Time (\Si{s}) \\
+Algorithm & $n$ & Mean error $\mu$ & Standard deviation $\sigma$ & Time (\Si{s}) \\
 \hline
 \input{Table1.tbl}
 \end{tabular}
@@ -176,21 +205,21 @@ Algorithm & $n$ & Mean error & Standard deviation & Time (\Si{s}) \\
 \label{Tbl:Multi}
 \end{table}
 
-From this result, we can see the multi-level Monte Carlo method with $ n = 1024 $ outperforms direct stratified Monte Carlo with $ n = 2048 $ both in accuracy, variance and speed. So for 2048 to 4096.
+From this result, we can see the multi-level Monte Carlo method with $ n = 1024 $ outperforms direct stratified Monte Carlo with $ n = 2048 $ both in accuracy, variance and speed. So for 2048 to 4096. Generally speaking, we can achieve \emph{3 times} of speed up using multi-level Monte Carlo.
 
 \section{Parallel algorithm} \label{Sec:Par}
 
-We utilize OpenMP to run the algorithm on parallel with cores. Previous numerical algorithms are carried out on personal machine with 4 cores. The numerical results below is run on the provided machine with 8 cores. We use a single \verb"omp parallel for" for the first dimension of grids $ N = 2 n \times n $. Since there are only $ 2 n $ iterations for the first dimension and $n$ is not very large, we directly adopt dynamic scheduling. the numerical result is summarized in Table \ref{Tbl:Math}. The job ID is 4479.
+We utilize OpenMP to run the algorithm on parallel with cores. Previous numerical algorithms are carried out on personal machine with 4 cores. The numerical results below is run on the provided machine with 8 cores. We use a single \verb"omp parallel for" for the first dimension of grids $ N = 2 n \times n $. Since there are only $ 2 n $ iterations for the first dimension and $n$ is not very large, we directly adopt dynamic scheduling. the numerical result is summarized in Table \ref{Tbl:Math}. The final testing job ID is 4479.
 
 \begin{table}[htbp]
 \centering
 \begin{tabular}{|c|c|c|c|c|c|}
 \hline
-Algorithm & $n$ & Mean error & Standard deviation & Time (\Si{s}) & Pass \\
+Algorithm & $n$ & Mean error $\mu$ & Standard deviation $\sigma$ & Time (\Si{s}) & Pass \\
 \hline
 Multi-level & 1024 & 1.94732e-5 & 2.83699e-5 & 5.47144 & 7 / 10 \\
 \hline
-Multi-level & 2048 & 1.50843e-5 & 1.23669e-6 & 21.91744 & 10 / 10 \\
+Multi-level & 2048 & 1.50843e-5 & 1.23669e-5 & 21.91744 & 10 / 10 \\
 \hline
 \end{tabular}
 \caption{Numerical result on 8 cores}
