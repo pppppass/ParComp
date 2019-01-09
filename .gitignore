@@ -21,6 +21,8 @@ Temporary/
 *.pdf
 *.so
 *.ipynb
+*.o
+MatMul/mat_mul
 
 # External files
 pnote.cls

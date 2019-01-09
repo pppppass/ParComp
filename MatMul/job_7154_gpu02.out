@@ -1,0 +1,161 @@
+Size: (old) 128 * 128 * 128, (new) 128 * 128 * 128
+CPU (old): 0.03030 sec
+  grid  dim:  8, 8, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00008 sec
+GPU (old): 0.79443 sec
+  grid  dim:  8, 8, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00002 sec
+GPU (old, repeat): 0.00173 sec
+GPU (old) all values correct
+CPU (new): 0.03021 sec
+  grid  dim:  8, 8, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00004 sec
+GPU (new): 0.00227 sec
+  grid  dim:  8, 8, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00004 sec
+GPU (new, repeat): 0.00145 sec
+GPU (new) all values correct
+Size: (old) 256 * 256 * 256, (new) 256 * 256 * 256
+CPU (old): 0.24304 sec
+  grid  dim:  16, 16, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00008 sec
+GPU (old): 0.74146 sec
+  grid  dim:  16, 16, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00004 sec
+GPU (old, repeat): 0.00195 sec
+GPU (old) all values correct
+CPU (new): 0.24193 sec
+  grid  dim:  16, 16, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00016 sec
+GPU (new): 0.00249 sec
+  grid  dim:  16, 16, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00016 sec
+GPU (new, repeat): 0.00200 sec
+GPU (new) all values correct
+Size: (old) 512 * 512 * 512, (new) 512 * 512 * 512
+CPU (old): 2.64698 sec
+  grid  dim:  32, 32, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00019 sec
+GPU (old): 0.75196 sec
+  grid  dim:  32, 32, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00019 sec
+GPU (old, repeat): 0.00484 sec
+GPU (old) all values correct
+CPU (new): 2.54595 sec
+  grid  dim:  32, 32, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00105 sec
+GPU (new): 0.00975 sec
+  grid  dim:  32, 32, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00108 sec
+GPU (new, repeat): 0.00609 sec
+GPU (new) all values correct
+Size: (old) 1024 * 1024 * 1024, (new) 1024 * 1024 * 1024
+CPU (old): 23.83322 sec
+  grid  dim:  64, 64, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00146 sec
+GPU (old): 0.81392 sec
+  grid  dim:  64, 64, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00145 sec
+GPU (old, repeat): 0.01181 sec
+GPU (old) all values correct
+CPU (new): 23.69435 sec
+  grid  dim:  64, 64, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00824 sec
+GPU (new): 0.03099 sec
+  grid  dim:  64, 64, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00824 sec
+GPU (new, repeat): 0.01792 sec
+GPU (new) all values correct
+Size: (new) 1 * 1 * 1
+CPU (new): 0.00000 sec
+  grid  dim:  1, 1, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00008 sec
+GPU (new): 0.72915 sec
+  grid  dim:  1, 1, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00003 sec
+GPU (new, repeat): 0.00135 sec
+GPU (new) all values correct
+Size: (new) 17 * 18 * 19
+CPU (new): 0.00009 sec
+  grid  dim:  2, 2, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00008 sec
+GPU (new): 0.74471 sec
+  grid  dim:  2, 2, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00003 sec
+GPU (new, repeat): 0.00203 sec
+GPU (new) all values correct
+Size: (new) 87 * 512 * 512
+CPU (new): 0.45037 sec
+  grid  dim:  6, 32, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00022 sec
+GPU (new): 0.75841 sec
+  grid  dim:  6, 32, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00022 sec
+GPU (new, repeat): 0.00355 sec
+GPU (new) all values correct
+Size: (new) 3 * 204 * 1892
+CPU (new): 0.01777 sec
+  grid  dim:  1, 119, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00006 sec
+GPU (new): 0.74889 sec
+  grid  dim:  1, 119, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00006 sec
+GPU (new, repeat): 0.00538 sec
+GPU (new) all values correct
+Size: (new) 1023 * 1024 * 1025
+CPU (new): 17.07140 sec
+  grid  dim:  64, 65, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00813 sec
+GPU (new): 0.80112 sec
+  grid  dim:  64, 65, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00813 sec
+GPU (new, repeat): 0.01820 sec
+GPU (new) all values correct
+Size: (new) 512 * 769 * 1024
+CPU (new): 9.37399 sec
+  grid  dim:  32, 64, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00315 sec
+GPU (new): 0.78138 sec
+  grid  dim:  32, 64, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00312 sec
+GPU (new, repeat): 0.01031 sec
+GPU (new) all values correct
+Size: (new) 1027 * 1031 * 1035
+CPU (new): 17.50449 sec
+  grid  dim:  65, 65, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00831 sec
+GPU (new): 0.82119 sec
+  grid  dim:  65, 65, 1.
+  block dim: 16, 16, 1.
+  kernel time: 0.00830 sec
+GPU (new, repeat): 0.01836 sec
+GPU (new) all values correct
